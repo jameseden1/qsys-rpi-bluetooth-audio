@@ -1,0 +1,19 @@
+[Unit]
+Description=BlueALSA aplay
+Requires=alsaloop.service
+After=alsaloop.service
+After=sound.target
+After=multi-user.target
+Requires=bluealsa.service
+After=bluealsa.service
+
+[Service]
+Type=simple
+User=root
+ExecStartPre=/bin/sleep 2
+ExecStart=/usr/bin/bluealsa-aplay --profile-a2dp --pcm-buffer-time=135000 --pcm-period-time=33750 00:00:00:00:00:00
+RestartSec=5
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,18 @@
+[Unit]
+Description=RpiBluetoothStream alsaloop Daemon
+Requires=aes67.service
+After=aes67.service
+After=sound.target
+After=multi-user.target
+
+[Service]
+Type=simple
+User=root
+ExecStartPre=/bin/sleep 2
+ExecStart=/bin/bash aes67path/alsaloop.sh
+RestartSec=5
+Restart=always
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

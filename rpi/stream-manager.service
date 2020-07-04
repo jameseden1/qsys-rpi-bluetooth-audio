@@ -1,0 +1,15 @@
+[Unit]
+Description=RpiBluetoothStream Manager
+After=multi-user.target
+
+[Service]
+Type=simple
+User=root
+ExecStartPre=/bin/sleep 2
+ExecStart=/usr/bin/python3 aes67path/manager.py
+RestartSec=5
+Restart=always
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install] 
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+[Unit]
+Description=RpiBluetoothStream AES67 Daemon
+Requires=sound.target
+After=sound.target
+After=multi-user.target
+
+[Service]
+Type=simple
+User=root
+ExecStartPre=/bin/sleep 2
+ExecStart=/bin/bash aes67path/run-aes67.sh
+RestartSec=5
+Restart=always
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
