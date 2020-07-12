@@ -33,7 +33,7 @@
 7. Copy the `rpi` repository over to the home directory of the Pi via SFTP (eg CyberDuck)
 
 8. Run `cd ~/rpi`
-    s
+
 9. Run `sudo python3 setup-1.py` and follow the prompts. Wait until it reboots
 
 10. Run `cd ~/rpi`

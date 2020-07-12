@@ -89,11 +89,11 @@ def reboot():
     except Exception as e:
         print(e)
 
-def stop_all():
+def stop_all(force=False):
     global sys_status
     global enabled
 
-    if not enabled:
+    if not enabled and force == False:
         return
 
     enabled = False
@@ -113,20 +113,25 @@ def start_all():
     if enabled:
         return
 
-    sys_status = 'Starting Bluetooth Service'
-    subprocess.check_output(['systemctl', 'start', 'bluetooth'])
-
-    sys_status = 'Starting a2dp-agent Service'
-    subprocess.check_output(['systemctl', 'start', 'a2dp-agent'])
-
-    sys_status = 'Starting bluealsa-aplay Service'
-    subprocess.check_output(['systemctl', 'start', 'bluealsa-aplay'])
-
     sys_status = 'Starting aes67 Service'
     subprocess.check_output(['systemctl', 'start', 'aes67'])
+    time.sleep(2)
 
     sys_status = 'Starting alsaloop Service'
     subprocess.check_output(['systemctl', 'start', 'alsaloop'])
+    time.sleep(2)
+
+    sys_status = 'Starting Bluetooth Service'
+    subprocess.check_output(['systemctl', 'start', 'bluetooth'])
+    time.sleep(1)
+
+    sys_status = 'Starting a2dp-agent Service'
+    subprocess.check_output(['systemctl', 'start', 'a2dp-agent'])
+    time.sleep(1)
+
+    sys_status = 'Starting bluealsa-aplay Service'
+    subprocess.check_output(['systemctl', 'start', 'bluealsa-aplay'])
+    time.sleep(1)
 
     sys_status = ''
 
@@ -137,7 +142,7 @@ def restart():
 
     logging.info('Restart services')
     try:
-        stop_all()
+        stop_all(force=True)
         time.sleep(1)
         start_all()
 
@@ -147,16 +152,13 @@ def restart():
         print(e)
 
 def run():
+    logging.info('Starting Manager')
     global enabled
 
     # Start all services
-    logging.info('Start services')
     subprocess.check_output(['systemctl', 'daemon-reload'])
-    subprocess.check_output(['systemctl', 'stop', 'a2dp-agent'])
-    subprocess.check_output(['systemctl', 'stop', 'bluealsa-aplay'])
-    subprocess.check_output(['systemctl', 'stop', 'aes67'])
-    subprocess.check_output(['systemctl', 'stop', 'alsaloop'])
-    logging.info('Services started')
+    stop_all(force=True)
+    time.sleep(5)
 
     # Create a TCP/IP socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
